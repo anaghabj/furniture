@@ -1,3 +1,8 @@
+const User = require('../../models/userSchema')
+
+
+
+
 const loadHomepage = async(req,res)=>{
     try {
         
@@ -20,7 +25,35 @@ const pageNotFound = async(req,res)=>{
     }
 }
 
+
+const loadSignup=async(req,res)=>{
+    try {
+        
+        res.render('signup')
+    } catch (error) {
+        console.log('Home page not loading',error);
+        res.status(500).send('server error')
+    }
+}
+
+const signup = async(req,res)=>{
+    try {
+        const {name,email,phone,password}=req.body;
+        const newUser  = new User ({name,email,phone,password})
+        await newUser.save();
+        res.redirect('/');
+        console.log(newUser)
+        
+    } catch (error) {
+        console.log('Error for save user',error);
+        res.status(500).send('internal server error')
+
+        
+    }
+}
 module.exports={
     loadHomepage,
-    pageNotFound
+    pageNotFound,
+    loadSignup,
+    signup
 }
